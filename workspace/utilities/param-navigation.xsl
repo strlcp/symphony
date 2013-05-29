@@ -2,7 +2,7 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 
-<!- is a plugin for the great:
+<!-- is a plugin for the great:
 
 http://www.getsymphony.com/download/xslt-utilities/view/35067/
 
