@@ -8,6 +8,29 @@ http://www.getsymphony.com/download/xslt-utilities/view/35067/
 
 -->
 
+<!-- install:
+
+
+So the first step is to made a static XML(param-navigation), where each page is listed you want to navigate through:
+
+<articles> 
+<ext-nav-categories> 
+<ext-nav-subcategories> 
+</ext-nav-subcategories> 
+</ext-nav-categories> 
+</articles> 
+
+for example.
+
+The second step is to generate the ext-nav-datasources as unchained sources, distributing the name and the link field.
+
+third is to put all ext-nav-sources in a uniondatasource called ext-navi.
+
+and last step is to add xslt.
+
+
+-->
+
 <!-- add this to navigation: -->
 <!-- direct after:
 
