@@ -1,4 +1,12 @@
-<!-- add the exsl namespace to master xml defintion: xmlns:exslt="http://exslt.org/common" -->
+<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet version="1.0" 
+xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+xmlns:exslt="http://exslt.org/common"
+>
+
+
+
+
 <!-- be sure that at least the var definition is found. at master:
  
  <xsl:variable name="javascripts">
@@ -20,13 +28,7 @@ at any other page: -->
 <xsl:call-template name="js" />
 -->
 
-<!"-- this is the template -->
 
-<?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" 
-xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-xmlns:exslt="http://exslt.org/common"
->
 <!-- this is the template -->
 
 <xsl:template name="js">
