@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" 
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-xmlns:exslt="http://exslt.org/common"
+xmlns:exsl="http://exslt.org/common"
+exclude-result-prefixes="xsl">
 >
 
 
@@ -32,7 +33,7 @@ at any other page: -->
 <!-- this is the template -->
 
 <xsl:template name="js">
-<xsl:for-each select="exslt:node-set($javascripts)/js">
+<xsl:for-each select="exsl:node-set($javascripts)/js">
 <script type="text/javascript" >
 <xsl:attribute name="src">
 <xsl:value-of select="text()" /></xsl:attribute> 
