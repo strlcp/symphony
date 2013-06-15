@@ -14,7 +14,7 @@ http://www.getsymphony.com/download/xslt-utilities/view/35067/
 So the first step is to made a static XML(param-navigation), where each page is listed you want to navigate through:
 
 <articles>
-<ext-nav-categories name="[paramname]"> <!-- the name of the /data/param you filter this source -->
+<ext-nav-categories name="[paramname]"> <!-- the name of the /data/param you filter this source 
 <ext-nav-subcategories name="[paramname]">
 </ext-nav-subcategories>
 </ext-nav-categories>
