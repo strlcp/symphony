@@ -14,7 +14,8 @@ http://www.getsymphony.com/download/xslt-utilities/view/35067/
 So the first step is to made a static XML(param-navigation), where each page is listed you want to navigate through:
 
 <articles>
-<ext-nav-categories name="[paramname]"> <!-- the name of the /data/param you filter this source 
+<ext-nav-categories name="[paramname]"--> 
+<!-- the name of the /data/param you filter this source 
 <ext-nav-subcategories name="[paramname]">
 </ext-nav-subcategories>
 </ext-nav-categories>
@@ -28,6 +29,9 @@ third is to put all ext-nav-sources in a uniondatasource called ext-navi.
 
 and last step is to add xslt.
 
+breadcrumb:
+
+If you don't want page-params in navigation, but in breadcrumb, just add them in your static xml and not in the union datasource.
 
 -->
 
@@ -46,7 +50,14 @@ http://www.getsymphony.com/download/xslt-utilities/view/35067/
 <xsl:with-param name="path" select="$path" />
 </xsl:apply-templates>
 -->
+<!--
+calling breadcrumb para-navigation:
 
+<xsl:call-template name="param-navigation" mode="breakcrumb">
+<xsl:with-param name="path" select="@path" />
+<xsl:with-param name="node" select="//data/param-navigation/*[name() = $page]" />
+</xsl:call-template>
+-->
 
 
 <!-- and this are the tempaltes: -->
@@ -115,6 +126,41 @@ http://www.getsymphony.com/download/xslt-utilities/view/35067/
 </xsl:if>
 
 </xsl:template>
+
+
+<!-- param navigation for breeadcrumb -->
+<xsl:template name="param-navigation" mode="breadcrumb" >
+
+<xsl:param name="path" />
+<xsl:param name="node" />
+<xsl:variable name="section">
+<xsl:value-of select="$node/*[1]/@name" />
+</xsl:variable>
+<xsl:if test="//data/params/*[name() =  $section]">
+<xsl:variable name="page">
+<xsl:value-of select="//data/params/*[name() =  $section]/text()" />
+</xsl:variable>
+<!-- printing the link -->
+<li>
+<a href="{$root}/{$path}/{$page}">
+<xsl:value-of select="$page" />
+</a>
+</li>
+<!-- testing wheter we could possible go down -->
+<xsl:if test="$node/*[1]/@name">
+<xsl:call-template name="param-navigation" mode="breakcrumb">
+<xsl:with-param name="page" select="$node/@name" />
+<xsl:with-param name="path" select="concat($path, '/', $page)" />
+<xsl:with-param name="node" select="$node/*[1]" />
+</xsl:call-template>
+</xsl:if>
+</xsl:if>
+</xsl:template>
+
+
+
+
 </xsl:stylesheet>
+
 
 
