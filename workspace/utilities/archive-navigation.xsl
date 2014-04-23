@@ -4,7 +4,7 @@
 
 <!-- archive navigation -->
 
-<!-- checking 
+<!-- checking  a sample static xml named  archive-navigation
 <all>              pages
   <exponate>       group filled in 
   <expo>           datasource
@@ -31,16 +31,13 @@
 <!-- checking all may pages will be made later -->
   <xsl:for-each select="//data/archive-navigation/all/*">
   
-  <li>
+<!-- @title if set -->
     <xsl:value-of select="name()" />
-   <ul>
- 
+<!-- else may create ul -->
   <xsl:for-each select="./*" >   
     <xsl:choose>
       <xsl:when test="not(./*[2])">
-        <li>	
 
-        </li>  
 	  <xsl:call-template name="aNavLoop">
 	    <xsl:with-param name="node" select="name()" /> 
 	    <xsl:with-param name="nde" select="." /> 
@@ -48,17 +45,17 @@
 	  </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
-	<li>
+      
+	<!-- the span thing -->
 	  <xsl:value-of select="name(./*[2])" />
-        </li>
+        
       </xsl:otherwise>
          
     </xsl:choose>
   </xsl:for-each>
 
   
-  </ul>
- </li> 
+
   
   </xsl:for-each>
 
@@ -103,7 +100,7 @@
 
  <xsl:param name="nde" />
 
- <!-- if @arg is not iso or not deffined in static xml -->
+ <!-- if @arg is not iso or not deffined in static xml - may not here -->
   <xsl:variable name="arg">
    <xsl:choose>
     <xsl:when test="$nde/*[1]/@arg">
@@ -123,6 +120,7 @@
 	  <xsl:when test="$nde/*[1]/@precision = 'month'" > 
 	       <xsl:value-of select="'Y/n/'" />
           </xsl:when>
+          <!-- need hour and minute -->
 	  <xsl:otherwise>
 	      <xsl:value-of  select="'Y/n/d/'" />
 	  </xsl:otherwise>
@@ -141,6 +139,7 @@
   
  <!-- testing for each part the diff -->
     <xsl:call-template name="aNavLoopDiff">
+      <xsl:with-param name="pos"  select="0" />
       <xsl:with-param name="list" select="normalize-space($list)" />
       <xsl:with-param name="string" select="normalize-space($list)" />
       <xsl:with-param name="compare" select="normalize-space($vgl)"/>
@@ -158,13 +157,13 @@
  </xsl:template>
 
 <!-- diffing  --> 
- 
+<!-- diff other than before, do uls -->
  <xsl:template name="aNavLoopDiff">
   <xsl:param name="list" />
   <xsl:param name="compare" />
   <xsl:param name="delimiter" />
   <xsl:param name="string" />
-
+  <xsl:param name="pos" />
  
   <xsl:if test="contains($list, $delimiter)"> 
    
@@ -184,8 +183,10 @@
    
     <xsl:choose> 
       <xsl:when test="$vglComp = $vgl">
-
+ <!-- increase number -->
+ 
       <xsl:call-template name="aNavLoopDiff">
+	<xsl:with-param name="pos"  select="$pos +1" />
 	<xsl:with-param name="list"  select="$rest" />
 	<xsl:with-param name="string" select="$string" />
 	<xsl:with-param name="compare" > <xsl:value-of select="$restComp" /> </xsl:with-param>
@@ -194,7 +195,10 @@
       </xsl:when>
       <xsl:otherwise>
   
+ 
 	<xsl:call-template name="aNavLoopPrint" >
+	  <xsl:with-param name="pos"  select="$pos" />
+	  <xsl:with-param name="posAc"  select="0" />
 	  <xsl:with-param name="list"  select="$rest" />
 	  <xsl:with-param name="string" select="$string" />
 	  <xsl:with-param name="delimiter" select="$delimiter" />
@@ -213,6 +217,8 @@
   <xsl:param name="list" />
   <xsl:param name="string" />
   <xsl:param name="delimiter" />
+  <xsl:param name="pos" />
+   <xsl:param name="posAc" />
  <!-- may loop -->
      <xsl:variable name="part"> 
 	<xsl:choose>
@@ -220,26 +226,28 @@
 	    <xsl:value-of select="substring-before($string, $list)" />
 	  </xsl:when>
 	  <xsl:otherwise>
-	    
+	    <xsl:value-of select="$string" />
 	  </xsl:otherwise>
 	 </xsl:choose> 
      </xsl:variable> 
-    
-    <xsl:if test="not($part)" >
-      <xsl:variable name="part" select="$list" />
-    </xsl:if>
-    <xsl:value-of select="$list" />  
-    
+    <li>
      <a>
 	<xsl:attribute name="href">
+	
+	<!-- 
+	  must be more flexible $root/archive can't reflect: 
+	      events/this_is_the_motto/lineup_artist_timeline
+	-->      
 	  <xsl:value-of select="concat($root, '/archive/', $part)" /> 
 	</xsl:attribute>
-	<xsl:value-of select="$part" />
+	<xsl:value-of select="concat($posAc, '-', $pos, '-# ')" />
      </a>
-  
+    </li>  
       <xsl:if test="contains($list, $delimiter)">
       
  	<xsl:call-template name="aNavLoopPrint" >
+	  <xsl:with-param name="pos"  select="$pos" />
+	  <xsl:with-param name="posAc"  select="$posAc + 1" />
 	  <xsl:with-param name="list"  select="substring-after($list, $delimiter)" />
 	  <xsl:with-param name="string" select="$string" />
 	  <xsl:with-param name="delimiter" select="$delimiter" />
