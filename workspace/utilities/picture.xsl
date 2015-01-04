@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" 
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:exsl="http://exslt.org/common"
+  exclude-result-prefixes="exsl"
+
+>
 
 
 <!-- prtpic needs node and max relation is opt. --> 
@@ -63,44 +68,71 @@
       <xsl:copy-of select="exsl:node-set($bufferChronologie)/noscript/*" /> 
       </noscript>
       
- -->     
+ -->
+ 
+ <!--     use path/urlBase/jit or resp {} or plain -->
+ 
+ 
   <!--  only picture model is needed  --> 
  <xsl:template name="pictureWrapperModel">
-  <xsl:param name="node" />
+
   <xsl:param name="link" />
-   <xsl:copy-of select="link" />
+  <xsl:param name="called" />
+<!--    <xsl:copy-of select="link" /> -->
+   <xsl:param name="resp" /> 
 <!--   <xsl:copy-of select="$node/*[*]/*[1]" /> -->
-  <xsl:variable name="hive">
-    <xsl:value-of select="name($node/*[*]/*[1]/..)" />
-  </xsl:variable>
+
 <!--   <xsl:copy-of select="$node" /> -->
   
-<xsl:text>({path: '</xsl:text>   
-    <xsl:value-of select="concat($node/*[name() = $hive]/@path, '/', $node/*[name() = $hive]/filename)" />
-    <xsl:text>', 
-	  urlBase: '</xsl:text>
-    <xsl:value-of select="$root" />  
-    <xsl:text>',</xsl:text>
-     <xsl:if test="$link">
-	<xsl:text>link: '</xsl:text><xsl:value-of disable-output-escaping="yes" select="$link" /><xsl:text>',
+<xsl:text>({resp: </xsl:text><xsl:value-of select="$resp" /><xsl:text>,
+	  </xsl:text>
+	  <xsl:if test="$link">
+	  <xsl:text>link: '</xsl:text><xsl:value-of disable-output-escaping="yes" select="$link" /><xsl:text>',
      </xsl:text>
     </xsl:if>
-<xsl:text>called: '</xsl:text><xsl:value-of disable-output-escaping="yes" select="$node/name/text()" /><xsl:text>',</xsl:text>        
-<xsl:text>alt: 'loading',
-	 jit: '/image/1/80/0</xsl:text>	
-    <xsl:text>'});</xsl:text> 
+    <xsl:text>called: '</xsl:text><xsl:value-of disable-output-escaping="yes" select="$called" /><xsl:text>',</xsl:text>        
+    <xsl:text>alt: 'loading'</xsl:text>
+    <xsl:text>});</xsl:text> 
 </xsl:template> 
   
 <!--  
  <script>
   <xsl:call-template name="pictureWrapperModel">
-    <xsl:with-param name="node" select="current()" />
+    <xsl:with-param name="called" select="current/name/text()" />
     <xsl:with-param name="link" select="concat($root, '/exponate/', workpiece/item/@handle)" />
+       
+       
+       <xsl:with-param name="resp">
+    	  <xsl:text>{
+	      path: '</xsl:text>   
+	      <xsl:value-of select="concat($node/*[name() = $hive]/@path, '/', $node/*[name() = $hive]/filename)" />
+	      <xsl:text>', 
+	      urlBase: '</xsl:text>
+	      <xsl:value-of select="$root" />  
+	      <xsl:text>',
+	      jit: '/image/1/80/0'	
+	     }</xsl:text>
+    </xsl:with-param>
+    
+    or use like etsy wants:
+    
+    
+    <xsl:with-param name="resp">
+    	  <xsl:text>{
+		    75: '</xsl:text><xsl:value-of select="images/item[1]/url-75x75/text()" /><xsl:text>',
+		    170: '</xsl:text><xsl:value-of select="images/item[1]/url-170x135/text()" /><xsl:text>',
+		    570: '</xsl:text><xsl:value-of select="images/item[1]/url-570xn/text()" /><xsl:text>'}</xsl:text>
+    </xsl:with-param>
+    
+    
    </xsl:call-template>
  </script>
 
 
 -->
+
+<!-- resp could be object(using the jit engine / or not jit )/  string (is not resp) -->
+
 <!--
 call the list something like
 -->
@@ -144,6 +176,10 @@ call the list something like
       </xsl:text></script> 
       
 -->
+
+
+<!--  depricated -->
+
 
 <xsl:template name="pictureWrapper">
   <xsl:param name="node" />
