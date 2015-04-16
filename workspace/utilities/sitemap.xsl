@@ -44,8 +44,6 @@
     </xsl:for-each> 
  </xsl:variable>  
  
- 
-   <xsl:copy-of select="exslt:node-set($buffer)" />  
  <xsl:for-each select="exslt:node-set($buffer)/url[generate-id() = generate-id(key('remoteLoc', loc/text()))]" >
     <xsl:copy-of select="." /> 
   </xsl:for-each>
